@@ -1,0 +1,46 @@
+"
+elements := #(1 3 5 6 9).
+odds := OrderedCollection  new.index := 1.
+[index <= elements size] whileTrue: [( ( elements  at: index ) odd ) ifTrue: [odds add:(elements  at: index )].
+    index:= index +1.
+    ].
+odds   
+"
+
+" el at no sirve en un conjunto pero si en una coleccion de este estilo "
+" esto es una chanchada es lo hice porque no conozco como funciona la coleccion "
+"
+
+elements := #(1 3 5 6 9).
+odds := OrderedCollection  new.
+elements do: [ :each | (each odd) ifTrue: [odds add: each ]
+        ].
+   
+    odds
+"
+    "y si quiero filtrar ? el conjunto no emplementa ni el array implementa el filtrado  pero como estas cosas son colecciones saben como filtrarse pero no como recorrerse "
+
+"array no tiene un select sino que lo hereda de collection  lo que hace select es crear un array nuevo e ir llenandolo con las cosas que tiene "  
+ #(1 3 5 6 4 9)[: element | (element odd) ].
+ 
+"select filtra por una condicion, devuelve los que cumplen esa condicion si ninguno cumple devuelve el vacio"
+
+ #(1 3 5 6 4 9 10 15 54 888 77849 165798498 9849817192  99811791929729 9197895954654) select: [:element | (element odd) ]
+ 
+" el doble del conjunto "
+
+#(1 3 5 6 4 9) collect: [:element | (element*2)]
+
+"OJO AL PIOJO  multiplico al "
+#(-1 -3 5 6 4 9) collect: [:element | (element*2)]
+
+#(-1 -3 5 6 4 9) collect: [:element | (element*element)] 
+
+"encontrar el primer par , detect  devuelve un elemento de la coleccion no una coleccion con un solo elemento"
+
+#(-1 2 -3 5 9) detect: [:element | (element even)]
+
+"y si no tiene par ?  tira error  para eso ponemo if NOne:  y lo que queremos que pasa "
+#(-1 -3 5 9) detect: [:element | (element even)] ifNone:[self error: 'no encontre nada tamo al horno ']
+
+" no vamos a usar el detect porque esto tira error cuando no encuentra nada "
