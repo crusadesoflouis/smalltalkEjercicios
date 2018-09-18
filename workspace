@@ -67,4 +67,68 @@ inyectemos un 0 en una suma de 0 en el siguiente elemento y asi iterando
 	char +1]
 
 esto no funciona 
+ariante 5, librasfuerzas kilogramofuerza
 "
+10*peso
+"objeto 10 recive mensaje * con el colaborador peso "
+10*dollar
+10*euro 
+"10*peso + 10*dollar  problema de precedencia  por lo que hace flatan los parentesis "
+(10*peso)+(10*dollar)
+"este si funciona " 
+(10*peso)+(10*dollar)+(50*peso)
+"tambien suma  y puedo quedarme solo con dolares "
+(10*peso)+(10*dollar)+(50*peso)-(60*peso)
+"el peso es un objeto definido por uno de los paquetes que viene con cuis como una unidad de medida simple "
+
+(10*peso) amount
+(10*second) unit 
+10 amount 
+10 unit
+
+(10*peso) + 50
+
+metro := BaseUnit nameForOne: 'metro' nameForMany: 'metros'.
+diezMetros  := metro with: 10.
+
+
+
+metros := BaseUnit  nameForOne: 'metro' nameForMany:'metros'.
+diezMetros := metros with: 10.
+"
+pulgadas := BaseUnit nameForOne: 'pulgada' nameForMany: 'pulgadas'.
+sesentaPulgadas := pulgadas with: 60.
+"
+centimetro := ProportionalDerivedUnit  baseUnit: metros conversionFactor: 1/100  nameForOne: 'centimetro' nameForMany: 'centimetros'  sign: 'cm'.
+
+diezMetros  convertTo: centimetro.
+
+" ahora en vez de definir las pulgadas podemos definir a las pulgadas enbase a los centimetros  o a los metros "
+
+pulgadas := ProportionalDerivedUnit baseUnit: metros conversionFactor: 0.0254 nameForOne: 'pulgada'  nameForMany: 'pulgadas' sign: 'in'.
+
+diezMetros convertTo:  pulgadas 
+
+
+metros := BaseUnit  nameForOne: 'metro' nameForMany:'metros'.
+diezMetros := metros with: 10.
+"
+pulgadas := BaseUnit nameForOne: 'pulgada' nameForMany: 'pulgadas'.
+sesentaPulgadas := pulgadas with: 60.
+"
+centimetro := ProportionalDerivedUnit  baseUnit: metros conversionFactor: 1/100  nameForOne: 'centimetro' nameForMany: 'centimetros'  sign: 'cm'.
+
+diezMetros  convertTo: centimetro.
+
+" ahora en vez de definir las pulgadas podemos definir a las pulgadas enbase a los centimetros  o a los metros "
+
+pulgadas := ProportionalDerivedUnit baseUnit: metros conversionFactor: 0.0254 nameForOne: 'pulgada'  nameForMany: 'pulgadas' sign: 'in'.
+
+diezMetros convertTo:  pulgadas 
+
+
+
+
+
+
+
