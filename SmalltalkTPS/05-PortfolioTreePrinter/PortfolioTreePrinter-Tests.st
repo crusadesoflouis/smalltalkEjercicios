@@ -528,15 +528,15 @@ accountSummaryLinesOf: aReceptiveAccount
 	
 	^ (SumaryLinesVisitor with: aReceptiveAccount) value! !
 
-!PortfolioTest methodsFor: 'test support' stamp: 'jml 10/18/2018 20:50:59'!
+!PortfolioTest methodsFor: 'test support' stamp: 'LA 10/24/2018 22:33:15'!
 accountTransferNetOf: aReceptiveAccount 
 	
-	^ aReceptiveAccount transferNet! !
+	^ (TransferNetVisitor with: aReceptiveAccount) value! !
 
-!PortfolioTest methodsFor: 'test support' stamp: 'jml 10/18/2018 21:28:02'!
+!PortfolioTest methodsFor: 'test support' stamp: 'LA 10/24/2018 22:33:55'!
 investmentEarningsOf: aReceptiveAccount 
 	
-	^ aReceptiveAccount investmentEarnings! !
+	^ (InvestmentEarningsVisitor with: aReceptiveAccount) value ! !
 
 !PortfolioTest methodsFor: 'test support' stamp: 'jml 10/18/2018 21:24:04'!
 investmentNetOf: aReceptiveAccount 

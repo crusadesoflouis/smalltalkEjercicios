@@ -86,10 +86,26 @@ applyToInvestmentNet: currentNet
 
 
 
+!CertificateOfDeposit methodsFor: 'value' stamp: 'LA 10/24/2018 22:44:10'!
+interestRate
+
+	^interestRate! !
+
+!CertificateOfDeposit methodsFor: 'value' stamp: 'LA 10/24/2018 22:43:59'!
+term
+	
+	^ term! !
+
 !CertificateOfDeposit methodsFor: 'value' stamp: 'jml 10/18/2018 21:23:01'!
 value
 	
 	^ value! !
+
+
+!CertificateOfDeposit methodsFor: 'accessing' stamp: 'LA 10/24/2018 22:47:53'!
+accept: anInvestmentEarningsVisitor 
+	
+	anInvestmentEarningsVisitor AcceptCertificateOfDeposit: self! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
@@ -158,11 +174,6 @@ AccountTransaction subclass: #TransferLeg
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'PortfolioTreePrinter-Ejercicio'!
-
-!TransferLeg methodsFor: 'balance' stamp: 'jml 10/18/2018 21:06:01'!
-applyToTransferNet: currentNet
-	
-	^ self applyToBalance: currentNet! !
 
 
 !TransferLeg methodsFor: 'value' stamp: 'jml 10/18/2018 20:40:00'!
@@ -300,12 +311,54 @@ Object subclass: #AccountTransactionVisitor
 	category: 'PortfolioTreePrinter-Ejercicio'!
 
 
+!classDefinition: #InvestmentEarningsVisitor category: #'PortfolioTreePrinter-Ejercicio'!
+AccountTransactionVisitor subclass: #InvestmentEarningsVisitor
+	instanceVariableNames: 'anAccount InverstMentEarnings'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'PortfolioTreePrinter-Ejercicio'!
+
+!InvestmentEarningsVisitor methodsFor: 'accessing' stamp: 'LA 10/24/2018 22:48:26'!
+AcceptCertificateOfDeposit: aCertificateOfDeposit 
+
+	InverstMentEarnings :=InverstMentEarnings + (aCertificateOfDeposit value * (aCertificateOfDeposit interestRate / 360) * aCertificateOfDeposit term)! !
+
+!InvestmentEarningsVisitor methodsFor: 'accessing' stamp: 'LA 10/24/2018 22:35:58'!
+initializeWith: aReceptiveAccount 
+	
+	anAccount  := aReceptiveAccount ! !
+
+!InvestmentEarningsVisitor methodsFor: 'accessing' stamp: 'LA 10/24/2018 22:44:57'!
+value
+
+	InverstMentEarnings :=0.
+	anAccount visitTransactionsWith: self.
+	^InverstMentEarnings ! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'InvestmentEarningsVisitor class' category: #'PortfolioTreePrinter-Ejercicio'!
+InvestmentEarningsVisitor class
+	instanceVariableNames: ''!
+
+!InvestmentEarningsVisitor class methodsFor: 'accessing' stamp: 'LA 10/24/2018 22:40:01'!
+with: aReceptiveAccount 
+	
+	^self new initializeWith: aReceptiveAccount ! !
+
+
 !classDefinition: #SumaryLinesVisitor category: #'PortfolioTreePrinter-Ejercicio'!
 AccountTransactionVisitor subclass: #SumaryLinesVisitor
 	instanceVariableNames: 'anAccount lines'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'PortfolioTreePrinter-Ejercicio'!
+
+!SumaryLinesVisitor methodsFor: 'accesing' stamp: 'LA 10/24/2018 22:59:43'!
+AcceptCertificateOfDeposit: aCertificateOfDeposit 
+
+	lines add: 'Plazo fijo por ', aCertificateOfDeposit value printString, ' durante ', aCertificateOfDeposit term printString ,' dias a una tna de ', (aCertificateOfDeposit  interestRate*100) printString, '%'.	
+! !
 
 !SumaryLinesVisitor methodsFor: 'accesing' stamp: 'LA 10/23/2018 04:46:06'!
 AcceptDeposit: aDeposit 
@@ -353,6 +406,59 @@ with: anAccount
 
 	^self new  initializeWith: anAccount ! !
 
+
+
+!classDefinition: #TransferNetVisitor category: #'PortfolioTreePrinter-Ejercicio'!
+AccountTransactionVisitor subclass: #TransferNetVisitor
+	instanceVariableNames: 'anAccount transferNet'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'PortfolioTreePrinter-Ejercicio'!
+
+!TransferNetVisitor methodsFor: 'accessing' stamp: 'LA 10/24/2018 22:45:54'!
+AcceptCertificateOfDeposit: aCertificateOfDeposit 
+! !
+
+!TransferNetVisitor methodsFor: 'accessing' stamp: 'LA 10/24/2018 21:57:04'!
+AcceptDeposit: aDeposit ! !
+
+!TransferNetVisitor methodsFor: 'accessing' stamp: 'LA 10/24/2018 21:57:13'!
+AcceptWhitdraw: aWithdraw 
+	! !
+
+!TransferNetVisitor methodsFor: 'accessing' stamp: 'LA 10/24/2018 21:58:23'!
+acceptTransferDeposit: aTransferDeposit 
+
+	transferNet  := transferNet + aTransferDeposit value! !
+
+!TransferNetVisitor methodsFor: 'accessing' stamp: 'LA 10/24/2018 21:58:34'!
+acceptTransferWithdraw: aTransferWithdraw 
+	
+	transferNet  := transferNet - aTransferWithdraw value	! !
+
+!TransferNetVisitor methodsFor: 'accessing' stamp: 'LA 10/24/2018 21:41:44'!
+initializeWith: aReceptiveAccount 
+	
+	
+	anAccount  := aReceptiveAccount ! !
+
+!TransferNetVisitor methodsFor: 'accessing' stamp: 'LA 10/24/2018 21:52:09'!
+value
+
+	transferNet:= 0.
+	anAccount  visitTransactionsWith: self.
+	^transferNet ! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'TransferNetVisitor class' category: #'PortfolioTreePrinter-Ejercicio'!
+TransferNetVisitor class
+	instanceVariableNames: ''!
+
+!TransferNetVisitor class methodsFor: 'accessing' stamp: 'LA 10/24/2018 21:41:25'!
+with: aReceptiveAccount 
+	
+	^ self new initializeWith:aReceptiveAccount ! !
 
 
 !classDefinition: #SummarizingAccount category: #'PortfolioTreePrinter-Ejercicio'!
@@ -540,20 +646,10 @@ balance
 	
 	^ transactions inject: 0 into: [ :balance :transaction | transaction applyToBalance: balance ]! !
 
-!ReceptiveAccount methodsFor: 'balance' stamp: 'jml 10/18/2018 21:29:09'!
-investmentEarnings
-	
-	^ transactions inject: 0 into: [ :earnings :transaction | transaction applyToInvestmentEarnings: earnings ]! !
-
 !ReceptiveAccount methodsFor: 'balance' stamp: 'jml 10/18/2018 21:24:46'!
 investmentNet
 	
 	^ transactions inject: 0 into: [ :net :transaction | transaction applyToInvestmentNet: net ]! !
-
-!ReceptiveAccount methodsFor: 'balance' stamp: 'jml 10/18/2018 21:03:17'!
-transferNet
-	
-	^ transactions inject: 0 into: [ :net :transaction | transaction applyToTransferNet: net ]! !
 
 
 
