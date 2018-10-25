@@ -543,10 +543,10 @@ investmentNetOf: aReceptiveAccount
 	
 	^ (InverstMentNetVisitor with: aReceptiveAccount) value! !
 
-!PortfolioTest methodsFor: 'test support' stamp: 'HernanWilkinson 9/6/2016 19:43'!
+!PortfolioTest methodsFor: 'test support' stamp: 'LA 10/25/2018 00:50:29'!
 portofolioTreeOf: aPortfolio namingAccountWith: aDictionary 
 	
-	self shouldBeImplemented ! !
+	^ (TreePrintPortfolioVisitor with: aPortfolio andKeys: aDictionary ) value! !
 
 !PortfolioTest methodsFor: 'test support' stamp: 'jml 10/18/2018 21:12:19'!
 registerCertificateOfDepositOf: anAmount during: aNumberOfDays at: anInteresRate on: anAccount

@@ -137,7 +137,6 @@ applyToBalance: currentBalance
 	^ currentBalance + value! !
 
 
-
 !Deposit methodsFor: 'accessing' stamp: 'LA 10/23/2018 04:36:09'!
 accept: aVisitor
 
@@ -161,7 +160,6 @@ AccountTransaction subclass: #TransferLeg
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'PortfolioTreePrinter-Ejercicio'!
-
 
 !TransferLeg methodsFor: 'value' stamp: 'jml 10/18/2018 20:40:00'!
 value
@@ -224,7 +222,6 @@ applyToBalance: currentBalance
 	^ currentBalance - self value! !
 
 
-
 !TransferWithdraw methodsFor: 'accessing' stamp: 'LA 10/23/2018 04:48:00'!
 accept: aVisitor
 
@@ -265,7 +262,6 @@ value
 applyToBalance: currentBalance
 	
 	^ currentBalance - value! !
-
 
 
 !Withdraw methodsFor: 'accessing' stamp: 'LA 10/23/2018 04:43:40'!
@@ -336,7 +332,6 @@ value
 	inverstmentNet := 0.
 	anAccount visitTransactionsWith: self.
 	^inverstmentNet .! !
-
 
 
 !InverstMentNetVisitor methodsFor: 'accessing' stamp: 'LA 10/24/2018 23:24:27'!
@@ -467,7 +462,6 @@ SumaryLinesVisitor class
 with: anAccount
 
 	^self new  initializeWith: anAccount ! !
-
 
 
 !classDefinition: #TransferNetVisitor category: #'PortfolioTreePrinter-Ejercicio'!
@@ -618,6 +612,18 @@ balance
 	
 	^ accounts sum: [ :account | account balance ]! !
 
+
+!Portfolio methodsFor: 'accessing' stamp: 'LA 10/25/2018 02:25:33'!
+accept: aTreePrintPortfolioVisitor 
+	
+	self accept: aTreePrintPortfolioVisitor atLevel: 0.! !
+
+!Portfolio methodsFor: 'accessing' stamp: 'LA 10/25/2018 02:24:02'!
+accept: aTreePrintPortfolioVisitor atLevel: aSmallInteger 
+	
+	
+	! !
+
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
 !classDefinition: 'Portfolio class' category: #'PortfolioTreePrinter-Ejercicio'!
@@ -713,14 +719,6 @@ visitTransactionsWith: aVisitor
 	transactions do: [:aTransacction | aTransacction accept: aVisitor]! !
 
 
-!classDefinition: #SummarizingAccountVisitor category: #'PortfolioTreePrinter-Ejercicio'!
-Object subclass: #SummarizingAccountVisitor
-	instanceVariableNames: ''
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'PortfolioTreePrinter-Ejercicio'!
-
-
 !classDefinition: #Transfer category: #'PortfolioTreePrinter-Ejercicio'!
 Object subclass: #Transfer
 	instanceVariableNames: 'value withdrawLeg depositLeg'
@@ -770,3 +768,37 @@ register: anAmount from: fromAccount to: toAccount
 	toAccount register: newTransfer depositLeg.
 	
 	^ newTransfer! !
+
+
+!classDefinition: #TreePrintPortfolioVisitor category: #'PortfolioTreePrinter-Ejercicio'!
+Object subclass: #TreePrintPortfolioVisitor
+	instanceVariableNames: 'keys lines portfolio'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'PortfolioTreePrinter-Ejercicio'!
+
+!TreePrintPortfolioVisitor methodsFor: 'initialization' stamp: 'LA 10/25/2018 02:19:20'!
+value
+
+	lines := OrderedCollection new.
+	portfolio accept: self.
+	
+	^lines! !
+
+
+!TreePrintPortfolioVisitor methodsFor: 'accessing' stamp: 'LA 10/25/2018 02:19:57'!
+initializeWith: aPortfolio andKeys: aDictionary 
+	
+	portfolio := aPortfolio.
+	keys := aDictionary .! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'TreePrintPortfolioVisitor class' category: #'PortfolioTreePrinter-Ejercicio'!
+TreePrintPortfolioVisitor class
+	instanceVariableNames: ''!
+
+!TreePrintPortfolioVisitor class methodsFor: 'creation' stamp: 'LA 10/25/2018 00:51:59'!
+with: aPortfolio andKeys: aDictionary 
+	
+	^self new initializeWith: aPortfolio andKeys: aDictionary ! !
