@@ -538,10 +538,10 @@ investmentEarningsOf: aReceptiveAccount
 	
 	^ (InvestmentEarningsVisitor with: aReceptiveAccount) value ! !
 
-!PortfolioTest methodsFor: 'test support' stamp: 'jml 10/18/2018 21:24:04'!
+!PortfolioTest methodsFor: 'test support' stamp: 'LA 10/24/2018 23:22:06'!
 investmentNetOf: aReceptiveAccount 
 	
-	^ aReceptiveAccount investmentNet! !
+	^ (InverstMentNetVisitor with: aReceptiveAccount) value! !
 
 !PortfolioTest methodsFor: 'test support' stamp: 'HernanWilkinson 9/6/2016 19:43'!
 portofolioTreeOf: aPortfolio namingAccountWith: aDictionary 

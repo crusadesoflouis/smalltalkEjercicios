@@ -69,43 +69,30 @@ initializeFor: anAmount during: aTerm at: anInterestRate
 	interestRate := anInterestRate.! !
 
 
-!CertificateOfDeposit methodsFor: 'balance' stamp: 'jml 10/18/2018 21:20:44'!
-applyToBalance: currentBalance
-	
-	^ currentBalance - value! !
-
-!CertificateOfDeposit methodsFor: 'balance' stamp: 'jml 10/18/2018 21:34:02'!
-applyToInvestmentEarnings: currentEarnings
-	
-	^ currentEarnings + (value * (interestRate / 360) * term)! !
-
-!CertificateOfDeposit methodsFor: 'balance' stamp: 'jml 10/18/2018 21:25:51'!
-applyToInvestmentNet: currentNet
-	
-	^ currentNet + value! !
-
-
-
-!CertificateOfDeposit methodsFor: 'value' stamp: 'LA 10/24/2018 22:44:10'!
-interestRate
-
-	^interestRate! !
-
-!CertificateOfDeposit methodsFor: 'value' stamp: 'LA 10/24/2018 22:43:59'!
-term
-	
-	^ term! !
-
-!CertificateOfDeposit methodsFor: 'value' stamp: 'jml 10/18/2018 21:23:01'!
-value
-	
-	^ value! !
-
-
 !CertificateOfDeposit methodsFor: 'accessing' stamp: 'LA 10/24/2018 22:47:53'!
 accept: anInvestmentEarningsVisitor 
 	
 	anInvestmentEarningsVisitor AcceptCertificateOfDeposit: self! !
+
+!CertificateOfDeposit methodsFor: 'accessing' stamp: 'jml 10/18/2018 21:20:44'!
+applyToBalance: currentBalance
+	
+	^ currentBalance - value! !
+
+!CertificateOfDeposit methodsFor: 'accessing' stamp: 'LA 10/24/2018 22:44:10'!
+interestRate
+
+	^interestRate! !
+
+!CertificateOfDeposit methodsFor: 'accessing' stamp: 'LA 10/24/2018 22:43:59'!
+term
+	
+	^ term! !
+
+!CertificateOfDeposit methodsFor: 'accessing' stamp: 'jml 10/18/2018 21:23:01'!
+value
+	
+	^ value! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
@@ -280,11 +267,6 @@ applyToBalance: currentBalance
 	^ currentBalance - value! !
 
 
-!Withdraw methodsFor: 'summary' stamp: 'jml 10/18/2018 20:22:50'!
-summaryLine
-	
-	^ 'Extraccion por ', value printString! !
-
 
 !Withdraw methodsFor: 'accessing' stamp: 'LA 10/23/2018 04:43:40'!
 accept: aVisitor 
@@ -309,6 +291,86 @@ Object subclass: #AccountTransactionVisitor
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'PortfolioTreePrinter-Ejercicio'!
+
+!AccountTransactionVisitor methodsFor: 'as yet unclassified' stamp: 'LA 10/24/2018 23:48:12'!
+AcceptCertificateOfDeposit: aCertificateOfDeposit 
+
+	self subclassResponsibility ! !
+
+!AccountTransactionVisitor methodsFor: 'as yet unclassified' stamp: 'LA 10/24/2018 23:50:02'!
+AcceptDeposit: aDeposit 
+
+	self subclassResponsibility ! !
+
+!AccountTransactionVisitor methodsFor: 'as yet unclassified' stamp: 'LA 10/24/2018 23:50:15'!
+AcceptWhitdraw: aWithdraw 
+	
+	self subclassResponsibility ! !
+
+!AccountTransactionVisitor methodsFor: 'as yet unclassified' stamp: 'LA 10/24/2018 23:50:23'!
+acceptTransferDeposit: aTransferDeposit 
+
+	self subclassResponsibility ! !
+
+!AccountTransactionVisitor methodsFor: 'as yet unclassified' stamp: 'LA 10/24/2018 23:50:31'!
+acceptTransferWithdraw: aTransferWithdraw 
+	
+	self subclassResponsibility ! !
+
+!AccountTransactionVisitor methodsFor: 'as yet unclassified' stamp: 'LA 10/24/2018 23:50:36'!
+value
+	
+	self subclassResponsibility ! !
+
+
+!classDefinition: #InverstMentNetVisitor category: #'PortfolioTreePrinter-Ejercicio'!
+AccountTransactionVisitor subclass: #InverstMentNetVisitor
+	instanceVariableNames: 'anAccount inverstmentNet'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'PortfolioTreePrinter-Ejercicio'!
+
+!InverstMentNetVisitor methodsFor: 'as yet unclassified' stamp: 'LA 10/24/2018 23:26:08'!
+value
+
+	inverstmentNet := 0.
+	anAccount visitTransactionsWith: self.
+	^inverstmentNet .! !
+
+
+
+!InverstMentNetVisitor methodsFor: 'accessing' stamp: 'LA 10/24/2018 23:24:27'!
+AcceptCertificateOfDeposit: aCertificateOfDeposit 
+	
+	inverstmentNet := inverstmentNet + aCertificateOfDeposit value! !
+
+!InverstMentNetVisitor methodsFor: 'accessing' stamp: 'LA 10/24/2018 23:23:11'!
+AcceptDeposit: aDeposit 
+	! !
+
+!InverstMentNetVisitor methodsFor: 'accessing' stamp: 'LA 10/24/2018 23:23:22'!
+AcceptWhitdraw: aWithdraw 
+	! !
+
+!InverstMentNetVisitor methodsFor: 'accessing' stamp: 'LA 10/24/2018 23:23:33'!
+acceptTransferWithdraw: aTransferWithdraw 
+	! !
+
+!InverstMentNetVisitor methodsFor: 'accessing' stamp: 'LA 10/24/2018 23:22:29'!
+initializeWith: aReceptiveAccount 
+	
+	anAccount := aReceptiveAccount ! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'InverstMentNetVisitor class' category: #'PortfolioTreePrinter-Ejercicio'!
+InverstMentNetVisitor class
+	instanceVariableNames: ''!
+
+!InverstMentNetVisitor class methodsFor: 'as yet unclassified' stamp: 'LA 10/24/2018 23:21:40'!
+with: aReceptiveAccount 
+	
+	^self new initializeWith: aReceptiveAccount ! !
 
 
 !classDefinition: #InvestmentEarningsVisitor category: #'PortfolioTreePrinter-Ejercicio'!
@@ -610,18 +672,6 @@ initialize
 	transactions := OrderedCollection new.! !
 
 
-!ReceptiveAccount methodsFor: 'transactions' stamp: 'HernanWilkinson 7/13/2011 18:37'!
-register: aTransaction
-
-	transactions add: aTransaction 
-! !
-
-!ReceptiveAccount methodsFor: 'transactions' stamp: 'HernanWilkinson 7/13/2011 18:37'!
-transactions 
-
-	^ transactions copy! !
-
-
 !ReceptiveAccount methodsFor: 'testing' stamp: 'HAW 10/11/2018 16:53:28'!
 doesManage: anAccount
 
@@ -641,22 +691,34 @@ hasRegistered: aTransaction
 ! !
 
 
-!ReceptiveAccount methodsFor: 'balance' stamp: 'jml 10/18/2018 21:00:00'!
+!ReceptiveAccount methodsFor: 'accessing' stamp: 'jml 10/18/2018 21:00:00'!
 balance
 	
 	^ transactions inject: 0 into: [ :balance :transaction | transaction applyToBalance: balance ]! !
 
-!ReceptiveAccount methodsFor: 'balance' stamp: 'jml 10/18/2018 21:24:46'!
-investmentNet
-	
-	^ transactions inject: 0 into: [ :net :transaction | transaction applyToInvestmentNet: net ]! !
+!ReceptiveAccount methodsFor: 'accessing' stamp: 'HernanWilkinson 7/13/2011 18:37'!
+register: aTransaction
 
+	transactions add: aTransaction 
+! !
 
+!ReceptiveAccount methodsFor: 'accessing' stamp: 'HernanWilkinson 7/13/2011 18:37'!
+transactions 
+
+	^ transactions copy! !
 
 !ReceptiveAccount methodsFor: 'accessing' stamp: 'LA 10/23/2018 04:32:31'!
 visitTransactionsWith: aVisitor 
 	
 	transactions do: [:aTransacction | aTransacction accept: aVisitor]! !
+
+
+!classDefinition: #SummarizingAccountVisitor category: #'PortfolioTreePrinter-Ejercicio'!
+Object subclass: #SummarizingAccountVisitor
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'PortfolioTreePrinter-Ejercicio'!
 
 
 !classDefinition: #Transfer category: #'PortfolioTreePrinter-Ejercicio'!
