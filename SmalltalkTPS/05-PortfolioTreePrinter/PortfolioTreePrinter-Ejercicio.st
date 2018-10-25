@@ -85,11 +85,6 @@ applyToInvestmentNet: currentNet
 	^ currentNet + value! !
 
 
-!CertificateOfDeposit methodsFor: 'summary' stamp: 'jml 10/18/2018 21:22:45'!
-summaryLine
-	
-	^ 'Plazo fijo por ', value printString, ' durante ', term printString, ' dias a una tna de ', (interestRate * 100) printString, '%'! !
-
 
 !CertificateOfDeposit methodsFor: 'value' stamp: 'jml 10/18/2018 21:23:01'!
 value
@@ -139,10 +134,11 @@ applyToBalance: currentBalance
 	^ currentBalance + value! !
 
 
-!Deposit methodsFor: 'summary' stamp: 'jml 10/18/2018 20:22:17'!
-summaryLine
-	
-	^ 'Deposito por ', value printString! !
+
+!Deposit methodsFor: 'accessing' stamp: 'LA 10/23/2018 04:36:09'!
+accept: aVisitor
+
+	aVisitor AcceptDeposit: self! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
@@ -187,61 +183,62 @@ transfer
 	^ transfer! !
 
 
-!classDefinition: #IncomingWire category: #'PortfolioTreePrinter-Ejercicio'!
-TransferLeg subclass: #IncomingWire
+!classDefinition: #TransferDeposit category: #'PortfolioTreePrinter-Ejercicio'!
+TransferLeg subclass: #TransferDeposit
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'PortfolioTreePrinter-Ejercicio'!
 
-!IncomingWire methodsFor: 'balance' stamp: 'jml 10/18/2018 20:58:38'!
+!TransferDeposit methodsFor: 'balance' stamp: 'jml 10/18/2018 20:58:38'!
 applyToBalance: currentBalance
 	
 	^ currentBalance + self value! !
 
 
-!IncomingWire methodsFor: 'summary' stamp: 'jml 10/18/2018 20:23:20'!
-summaryLine
-	
-	^ 'Transferencia por ', self value printString! !
+!TransferDeposit methodsFor: 'summary' stamp: 'LA 10/23/2018 05:08:45'!
+accept: aVisitor
+
+	aVisitor acceptTransferDeposit: self.! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
-!classDefinition: 'IncomingWire class' category: #'PortfolioTreePrinter-Ejercicio'!
-IncomingWire class
+!classDefinition: 'TransferDeposit class' category: #'PortfolioTreePrinter-Ejercicio'!
+TransferDeposit class
 	instanceVariableNames: ''!
 
-!IncomingWire class methodsFor: 'instance creation' stamp: 'jml 10/18/2018 20:01:28'!
+!TransferDeposit class methodsFor: 'instance creation' stamp: 'jml 10/18/2018 20:01:28'!
 for: aTransfer
 	
 	^ self new initializeFor: aTransfer! !
 
 
-!classDefinition: #OutcomingWire category: #'PortfolioTreePrinter-Ejercicio'!
-TransferLeg subclass: #OutcomingWire
+!classDefinition: #TransferWithdraw category: #'PortfolioTreePrinter-Ejercicio'!
+TransferLeg subclass: #TransferWithdraw
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'PortfolioTreePrinter-Ejercicio'!
 
-!OutcomingWire methodsFor: 'balance' stamp: 'jml 10/18/2018 20:59:02'!
+!TransferWithdraw methodsFor: 'balance' stamp: 'jml 10/18/2018 20:59:02'!
 applyToBalance: currentBalance
 	
 	^ currentBalance - self value! !
 
 
-!OutcomingWire methodsFor: 'summary' stamp: 'jml 10/18/2018 20:23:27'!
-summaryLine
-	
-	^ 'Transferencia por -', self value printString! !
+
+!TransferWithdraw methodsFor: 'accessing' stamp: 'LA 10/23/2018 04:48:00'!
+accept: aVisitor
+
+	aVisitor acceptTransferWithdraw: self.! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
-!classDefinition: 'OutcomingWire class' category: #'PortfolioTreePrinter-Ejercicio'!
-OutcomingWire class
+!classDefinition: 'TransferWithdraw class' category: #'PortfolioTreePrinter-Ejercicio'!
+TransferWithdraw class
 	instanceVariableNames: ''!
 
-!OutcomingWire class methodsFor: 'instance creation' stamp: 'jml 10/18/2018 20:01:39'!
+!TransferWithdraw class methodsFor: 'instance creation' stamp: 'jml 10/18/2018 20:01:39'!
 for: aTransfer
 	
 	^ self new initializeFor: aTransfer! !
@@ -277,6 +274,12 @@ summaryLine
 	
 	^ 'Extraccion por ', value printString! !
 
+
+!Withdraw methodsFor: 'accessing' stamp: 'LA 10/23/2018 04:43:40'!
+accept: aVisitor 
+	
+	aVisitor AcceptWhitdraw: self! !
+
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
 !classDefinition: 'Withdraw class' category: #'PortfolioTreePrinter-Ejercicio'!
@@ -287,6 +290,69 @@ Withdraw class
 for: aValue
 
 	^ self new initializeFor: aValue ! !
+
+
+!classDefinition: #AccountTransactionVisitor category: #'PortfolioTreePrinter-Ejercicio'!
+Object subclass: #AccountTransactionVisitor
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'PortfolioTreePrinter-Ejercicio'!
+
+
+!classDefinition: #SumaryLinesVisitor category: #'PortfolioTreePrinter-Ejercicio'!
+AccountTransactionVisitor subclass: #SumaryLinesVisitor
+	instanceVariableNames: 'anAccount lines'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'PortfolioTreePrinter-Ejercicio'!
+
+!SumaryLinesVisitor methodsFor: 'accesing' stamp: 'LA 10/23/2018 04:46:06'!
+AcceptDeposit: aDeposit 
+	
+	lines add:  'Deposito por ', aDeposit value printString! !
+
+!SumaryLinesVisitor methodsFor: 'accesing' stamp: 'LA 10/23/2018 04:46:28'!
+AcceptWhitdraw: aWithdraw 
+	
+	lines add:  'Extraccion por ', aWithdraw value printString! !
+
+!SumaryLinesVisitor methodsFor: 'accesing' stamp: 'LA 10/23/2018 05:09:50'!
+acceptTransferDeposit: aTransferDeposit 
+	
+	lines add:  'Transferencia por ', aTransferDeposit value printString! !
+
+!SumaryLinesVisitor methodsFor: 'accesing' stamp: 'LA 10/23/2018 05:09:55'!
+acceptTransferWithdraw: aTransferWithdraw 
+	
+	lines add: 'Transferencia por -', aTransferWithdraw value printString! !
+
+!SumaryLinesVisitor methodsFor: 'accesing' stamp: 'LA 10/23/2018 05:07:09'!
+value
+
+	lines := OrderedCollection new.
+	anAccount visitTransactionsWith: self.
+	^lines
+	
+	! !
+
+
+!SumaryLinesVisitor methodsFor: 'initializing' stamp: 'LA 10/23/2018 05:06:52'!
+initializeWith: aReceptiveAccount 
+
+	anAccount  := aReceptiveAccount.! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'SumaryLinesVisitor class' category: #'PortfolioTreePrinter-Ejercicio'!
+SumaryLinesVisitor class
+	instanceVariableNames: ''!
+
+!SumaryLinesVisitor class methodsFor: 'as yet unclassified' stamp: 'LA 10/23/2018 04:14:26'!
+with: anAccount
+
+	^self new  initializeWith: anAccount ! !
+
 
 
 !classDefinition: #SummarizingAccount category: #'PortfolioTreePrinter-Ejercicio'!
@@ -490,10 +556,11 @@ transferNet
 	^ transactions inject: 0 into: [ :net :transaction | transaction applyToTransferNet: net ]! !
 
 
-!ReceptiveAccount methodsFor: 'summary' stamp: 'jml 10/18/2018 20:18:33'!
-summaryLines
+
+!ReceptiveAccount methodsFor: 'accessing' stamp: 'LA 10/23/2018 04:32:31'!
+visitTransactionsWith: aVisitor 
 	
-	^ transactions collect: [ :transaction | transaction summaryLine ]! !
+	transactions do: [:aTransacction | aTransacction accept: aVisitor]! !
 
 
 !classDefinition: #Transfer category: #'PortfolioTreePrinter-Ejercicio'!
@@ -503,12 +570,12 @@ Object subclass: #Transfer
 	poolDictionaries: ''
 	category: 'PortfolioTreePrinter-Ejercicio'!
 
-!Transfer methodsFor: 'initialization' stamp: 'jml 10/18/2018 20:49:51'!
+!Transfer methodsFor: 'initialization' stamp: 'jml 10/22/2018 18:24:29'!
 initializeFor: aValue
 
 	value := aValue.
-	withdrawLeg := OutcomingWire for: self.
-	depositLeg := IncomingWire for: self.
+	withdrawLeg := TransferWithdraw for: self.
+	depositLeg := TransferDeposit for: self.
 ! !
 
 
